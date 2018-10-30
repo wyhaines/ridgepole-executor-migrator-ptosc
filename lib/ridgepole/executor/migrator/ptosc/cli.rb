@@ -266,9 +266,7 @@ module Ridgepole
 
           def parse(config, metaconfig)
             @config.merge!(config)
-            puts "RAW METACONFIG: #{metaconfig.inspect}"
             @metaconfig.merge!(metaconfig)
-            puts "MERGED METACONFIG: #{@metaconfig.inspect}"
             call_list = Swiftcore::Tasks::TaskList.new
             _setup_helptext
 
