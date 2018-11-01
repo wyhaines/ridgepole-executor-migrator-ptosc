@@ -15,9 +15,6 @@ module Ridgepole
           DEFAULT_CMD = 'pt-online-schema-change'
           attr_reader :config, :metaconfig
 
-          def initialize
-          end
-
           def _setup_helptext
             @metaconfig[:helptext] << <<~EHELP
               The following flags all affect the parameters passed to pt-osc. Unless

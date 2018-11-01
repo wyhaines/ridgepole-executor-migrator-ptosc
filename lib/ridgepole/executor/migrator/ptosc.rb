@@ -7,13 +7,14 @@ require 'erb'
 module Ridgepole
   class Executor
     class Migrator
+      # rubocop: disable Metrics/ClassLength
       # Handle the invocation of pt-osc.
       class Ptosc
         ALTER_REGEXP = /^\s*alter[\s\\]+table[\s\\]+([\\\'\"\`\w]+)/i
 
-        attr_reader :raw_sql, :config, :default_host, :default_user,
-                    :default_database, :default_table, :default_password,
-                    :default_charset, :default_recurse, :default_other_flags,
+        attr_reader :raw_sql, :default_host, :default_user, :default_database,
+                    :default_table, :default_password, :default_charset,
+                    :default_recurse, :default_other_flags,
                     :default_recursion_method, :default_max_load,
                     :default_critical_load, :default_alter_foreign_keys_method,
                     :default_chunk_size, :default_sleep, :default_plugin
@@ -33,7 +34,9 @@ module Ridgepole
           @default_max_load = 'Threads_running=100'
           @default_critical_load = 'Threads_running=120'
           @default_alter_foreign_keys_method = 'rebuild_constraints'
-          @default_plugin = ['pt-online-schema-change-fast-rebuild-constraints.pl']
+          @default_plugin = [
+            'pt-online-schema-change-fast-rebuild-constraints.pl'
+          ]
           @default_chunk_size = 1000
           @default_sleep = 0.1
           @default_other_flags = ['--dry-run']
@@ -139,6 +142,7 @@ module Ridgepole
           run_pt_osc
         end
       end
+      # rubocop: enable Metrics/ClassLength
     end
   end
 end
