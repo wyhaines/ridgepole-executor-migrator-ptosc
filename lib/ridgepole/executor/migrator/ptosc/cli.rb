@@ -206,9 +206,9 @@ module Ridgepole
           end
 
           def _handle_options(opts, call_list)
-            %(alter database host password table user fkmethod charset
+            %w[alter database host password table user fkmethod charset
                chunk_size critical_load dry_run execute max_load plugin
-               recurse recursion_method sleep).each do |m|
+               recurse recursion_method sleep].each do |m|
               __send__(:"_opt_#{m}", opts, call_list)
             end
           end
