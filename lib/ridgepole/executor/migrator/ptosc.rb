@@ -39,7 +39,7 @@ module Ridgepole
           ]
           @default_chunk_size = 1000
           @default_sleep = 0.1
-          @default_other_flags = ['--dry-run']
+          @default_other_flags = []
         end
         # rubocop: enable Metrics/MethodLength
 
