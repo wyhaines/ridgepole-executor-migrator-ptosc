@@ -58,7 +58,7 @@ module Ridgepole
         def parse_raw_sql_for_pt_osc
           @raw_sql =~ ALTER_REGEXP
           config['table'] = strip_quotes(Regexp.last_match(1))
-          @sql = @raw_sql.gsub(ALTER_REGEXP, '').strip.shellescape
+          @formatted_sql = @raw_sql.gsub(ALTER_REGEXP, '').strip.shellescape
         end
 
         def parse_config_equivalencies_for_pt_osc
@@ -69,21 +69,20 @@ module Ridgepole
         def run_pt_osc
           parse_raw_sql_for_pt_osc
           parse_config_equivalencies_for_pt_osc
-          puts pt_osc_cmdline
-          #          system(pt_osc_cmdline)
+          system(pt_osc_cmdline)
         end
 
-        def default_sql
-          @sql&.empty? ? @default_sql : @sql
+        def default_formatted_sql
+          @formatted_sql&.empty? ? @default_sql : @formatted_sql
         end
 
         def default_cmdline
           <<~ECMD
             pt-online-schema-change \\
-              --alter <%= sql %> \\
+              --alter <%= formatted_sql %> \\
               --host "<%= host %>" \\
               -u "<%= user %>" \\
-              D="<%= database %>",t="<%= table %>"="<%= password %>" \\
+              D="<%= database %>",t="<%= table %>",p="<%= password %>" \\
               --charset=<%= charset %> \\
               --recurse=<%= recurse %> \\
               --recursion-method=<%= recursion_method %> \\
@@ -98,7 +97,7 @@ module Ridgepole
         end
 
         def pt_osc_variables
-          %w[sql host user database table password charset recurse
+          %w[formatted_sql host user database table password charset recurse
              recursion_method max_load critical_load alter_foreign_keys_method
              chunk_size sleep cmdline plugin other_flags]
         end
@@ -111,6 +110,8 @@ module Ridgepole
           case var
           when 'plugin'
             [ENV[envname(var)].to_s.split(/\s*,\s*/)].flatten
+          when 'other_flags'
+            [ENV[envname(var)].to_s.split(/\s+/)].flatten
           else
             ENV[envname(var)]
           end
